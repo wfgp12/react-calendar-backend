@@ -9,6 +9,7 @@ const { check } = require("express-validator");
 
 const authController = require("../controllers/auth");
 const { fieldValidations } = require("../middlewares/field-validations");
+const { validateToken } = require("../middlewares/validate-token");
 
 router.post("/", [
     check("email", "Email is required").isEmail(),
@@ -21,6 +22,6 @@ router.post("/register", [
     check("password", "Password is more than 6 characters").isLength({ min: 6 }),
     fieldValidations
 ], authController.createUser);
-router.get("/renew", authController.renewToken);
+router.get("/renew", [validateToken], authController.renewToken);
 
 module.exports = router;
