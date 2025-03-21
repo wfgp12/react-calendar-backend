@@ -25,8 +25,10 @@ router.post("/", [
         check("end", "End date is required").not().isEmpty()
         .custom(isDate).withMessage("End date is not a valid date")
         .custom((value, { req }) => {
-            const start = new Date(req.body.start);
-            return value > start;
+            const start = new Date(req.body.start).getTime();
+            const end = new Date(value).getTime();
+
+            return end > start;
         }).withMessage("End date must be greater than start date"),
     fieldValidations
 ], eventsController.createEvent);
