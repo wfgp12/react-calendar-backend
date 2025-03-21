@@ -75,10 +75,17 @@ module.exports = {
     renewToken: async(req, res) => {
         const { uid, name } = req.user;
 
+        let user = await User.findById(uid);
+
         const token = await generateJWT(uid, name);
         res.json({
             ok: true,
-            token
+            token,
+            user: {
+                uid,
+                name,
+                email: user.email
+            }
         });
     }
 }
